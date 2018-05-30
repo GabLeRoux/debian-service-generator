@@ -3,7 +3,7 @@
 SERVICE_FILE=$(tempfile)
 
 echo "--- Download template ---"
-wget -q -O "$SERVICE_FILE" 'https://raw.github.com/gist/4275302/service.sh'
+wget -q -O "$SERVICE_FILE" 'https://gist.githubusercontent.com/GabLeRoux/8c108ce803fa5391207cf86962782153/raw/service.sh'
 chmod +x "$SERVICE_FILE"
 echo ""
 
