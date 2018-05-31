@@ -1,4 +1,4 @@
-t!/bin/sh
+#!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          <NAME>
 # Required-Start:    $local_fs $network $named $time $syslog
@@ -8,21 +8,32 @@ t!/bin/sh
 # Description:       <DESCRIPTION>
 ### END INIT INFO
 
-SCRIPT=<COMMAND>
+SCRIPT="<COMMAND>"
 RUNAS=<USERNAME>
 
 PIDFILE=/var/run/<NAME>.pid
 LOGFILE=/var/log/<NAME>.log
 
 start() {
-  if [ -f /var/run/$PIDNAME ] && kill -0 $(cat /var/run/$PIDNAME); then
+  if [ -f $PIDFILE ] && [ -s $PIDFILE ] && kill -0 $(cat $PIDFILE); then
     echo 'Service already running' >&2
     return 1
   fi
   echo 'Starting service…' >&2
   local CMD="$SCRIPT &> \"$LOGFILE\" & echo \$!"
   su -c "$CMD" $RUNAS > "$PIDFILE"
-  echo 'Service started' >&2
+ # Try with this command line instead of above if not workable
+ # su -s /bin/sh $RUNAS -c "$CMD" > "$PIDFILE"
+
+  sleep 2
+  PID=$(cat $PIDFILE)
+    if pgrep -u $RUNAS -f $NAME > /dev/null
+    then
+      echo "$NAME is now running, the PID is $PID"
+    else
+      echo ''
+      echo "Error! Could not start $NAME!"
+    fi
 }
 
 stop() {
@@ -42,11 +53,28 @@ uninstall() {
   if [ "$SURE" = "yes" ]; then
     stop
     rm -f "$PIDFILE"
-    echo "Notice: log file is not be removed: '$LOGFILE'" >&2
-    update-rc.d -f <NAME> remove
+    echo "Notice: log file was not removed: $LOGFILE" >&2
+    update-rc.d -f $NAME remove
     rm -fv "$0"
+  else
+    echo "Abort!"
   fi
 }
+
+status() {
+    printf "%-50s" "Checking <NAME>..."
+    if [ -f $PIDFILE ] && [ -s $PIDFILE ]; then
+        PID=$(cat $PIDFILE)
+            if [ -z "$(ps axf | grep ${PID} | grep -v grep)" ]; then
+                printf "%s\n" "The process appears to be dead but pidfile still exists"
+            else
+                echo "Running, the PID is $PID"
+            fi
+    else
+        printf "%s\n" "Service not running"
+    fi
+}
+
 
 case "$1" in
   start)
@@ -54,6 +82,9 @@ case "$1" in
     ;;
   stop)
     stop
+    ;;
+  status)
+    status
     ;;
   uninstall)
     uninstall
@@ -63,5 +94,5 @@ case "$1" in
     start
     ;;
   *)
-    echo "Usage: $0 {start|stop|restart|uninstall}"
+    echo "Usage: $0 {start|stop|status|restart|uninstall}"
 esac

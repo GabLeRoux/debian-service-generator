@@ -1,10 +1,11 @@
 # Sample service script for debianoids
 
-Generate debian services based on [Sample /etc/init.d naholyr's gist](https://gist.github.com/naholyr/4275302)
+Generate debian services based on [Sample /etc/init.d naholyr's gist](https://gist.github.com/naholyr/4275302) and [wyhasany/sample-service-script repository](https://github.com/wyhasany/sample-service-script)
 
 ## Resources
 
-Look at [LSB init scripts](http://wiki.debian.org/LSBInitScripts) for more information.
+* [LSB init scripts](http://wiki.debian.org/LSBInitScripts) for more information.
+* [MetaInit debian package](https://wiki.debian.org/MetaInit) to do something similar as this repository 
 
 ## Usage
 
@@ -36,6 +37,16 @@ Install service to be run at boot-time:
 ```sh
 update-rc.d $YOUR_SERVICE_NAME defaults
 ```
+For rpm based distributions such as CentOS or Red Hat, you can use
+
+```sh
+chkconfig $YOUR_SERVICE_NAME --add
+```
+If you want to see which runlevel your script will run in
+
+```sh
+chkconfig $YOUR_SERVICE_NAME --list
+```
 
 Enjoy
 
@@ -66,7 +77,7 @@ cat << EOF > /etc/logrotate.d/$NAME.conf
 EOF
 ```
 
-## Automated script
+## Automated installation
 
 ```sh
 wget 'https://raw.githubusercontent.com/GabLeRoux/debian-service-generator/master/new-service.sh' && bash new-service.sh
@@ -79,6 +90,32 @@ If you feel confident enough with my script, you can `sudo` the script directly:
 ```sh
 wget 'https://raw.githubusercontent.com/GabLeRoux/debian-service-generator/master/new-service.sh' && sudo bash new-service.sh
 ```
+
+The script works offline so you can clone this repository and upload this script on your server and run it directly:
+
+```sh
+sudo bash new-service.sh
+```
+
+The script also handle parameters as showed below:
+
+```sh
+sudo bash new-service.sh "service_name" "description" "command to execute" "user which should run command"
+```
+
+### Demo
+
+Creating the service:
+
+![service-create](screenshots/service-create.png)
+
+Looking at service files (logs, pid):
+
+![service-files](screenshots/service-files.png)
+
+Uninstalling service:
+
+![service-uninstall](screenshots/service-uninstall.png)
 
 ## LICENSE
 
