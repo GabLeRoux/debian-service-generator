@@ -1,5 +1,9 @@
 # Sample service script for debianoids
 
+Generate debian services based on [Sample /etc/init.d naholyr's gist](https://gist.github.com/naholyr/4275302)
+
+## Resources
+
 Look at [LSB init scripts](http://wiki.debian.org/LSBInitScripts) for more information.
 
 ## Usage
@@ -43,11 +47,26 @@ Don't want it? Remove lines 56-58 of the service's script.
 
 ## Logs?
 
-Your service will log its output to `/var/log/$NAME.log`. Don't forget to setup a logrotate :)
+Your service will log its output to `/var/log/$NAME.log`. Don't forget to setup a *logrotate*.
 
-## I'm noob and/or lazy
+### logrotate example
 
-Yep, I'm lazy too. But still, I've written a script to automate this :)
+Using heredocs to create `/etc/logrotate.d/$NAME.conf` :tada:
+
+```sh
+cat << EOF > /etc/logrotate.d/$NAME.conf
+/var/log/$NAME.log {
+  weekly
+  missingok
+  compress
+  delaycompress
+  notifempty
+  copytruncate
+}
+EOF
+```
+
+## Automated script
 
 ```sh
 wget 'https://gist.githubusercontent.com/GabLeRoux/8c108ce803fa5391207cf86962782153/raw/new-service.sh' && bash new-service.sh
@@ -61,16 +80,7 @@ If you feel confident enough with my script, you can `sudo` the script directly:
 wget 'https://gist.githubusercontent.com/GabLeRoux/8c108ce803fa5391207cf86962782153/raw/new-service.sh' && sudo bash new-service.sh
 ```
 
-### Demo
+## LICENSE
 
-Creating the service:
+[MIT](LICENSE.md) © [Gabriel Le Breton](https://gableroux.com)
 
-![service-create](http://dl.dropbox.com/u/6414656/gist-4275302/service-create.png)
-
-Looking at service files (logs, pid):
-
-![service-files](http://dl.dropbox.com/u/6414656/gist-4275302/service-files.png)
-
-Uninstalling service:
-
-![service-uninstall](http://dl.dropbox.com/u/6414656/gist-4275302/service-uninstall.png)
