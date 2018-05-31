@@ -69,7 +69,7 @@ EOF
 ## Automated script
 
 ```sh
-wget 'https://gist.githubusercontent.com/GabLeRoux/8c108ce803fa5391207cf86962782153/raw/new-service.sh' && bash new-service.sh
+wget 'https://raw.githubusercontent.com/GabLeRoux/debian-service-generator/master/new-service.sh' && bash new-service.sh
 ```
 
 In this script I will download `service.sh` into a `tempfile`, replace some tokens, and then show you commands you should run as superuser.
@@ -77,7 +77,7 @@ In this script I will download `service.sh` into a `tempfile`, replace some toke
 If you feel confident enough with my script, you can `sudo` the script directly:
 
 ```sh
-wget 'https://gist.githubusercontent.com/GabLeRoux/8c108ce803fa5391207cf86962782153/raw/new-service.sh' && sudo bash new-service.sh
+wget 'https://raw.githubusercontent.com/GabLeRoux/debian-service-generator/master/new-service.sh' && sudo bash new-service.sh
 ```
 
 ## LICENSE

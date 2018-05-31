@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 SERVICE_FILE=$(tempfile)
 
 echo "--- Download template ---"
-wget -q -O "$SERVICE_FILE" 'https://gist.githubusercontent.com/GabLeRoux/8c108ce803fa5391207cf86962782153/raw/service.sh'
+wget -q -O "$SERVICE_FILE" 'https://raw.githubusercontent.com/GabLeRoux/debian-service-generator/master/service.sh'
 chmod +x "$SERVICE_FILE"
 echo ""
 
@@ -28,6 +28,7 @@ prompt_token() {
 }
 
 prompt_token 'NAME'        'Service name'
+
 if [ -f "/etc/init.d/$NAME" ]; then
   echo "Error: service '$NAME' already exists"
   exit 1
@@ -36,6 +37,7 @@ fi
 prompt_token 'DESCRIPTION' ' Description'
 prompt_token 'COMMAND'     '     Command'
 prompt_token 'USERNAME'    '        User'
+
 if ! id -u "$USERNAME" &> /dev/null; then
   echo "Error: user '$USERNAME' not found"
   exit 1
