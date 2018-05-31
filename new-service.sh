@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SERVICE_FILE=$(tempfile)
+SERVICE_FILE=$(mktemp)
 
 if [ ! -e service.sh ]; then
   echo "--- Download template ---"
